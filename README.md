@@ -1,2 +1,2 @@
-# Stippling
+# Stipply
 # Author: NachomPls, Zeanger
