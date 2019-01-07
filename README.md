@@ -1,2 +1,2 @@
 # Stipply
-# Author: NachomPls, Zeanger
+# Author: Nibbo, Zeanger
