@@ -107,7 +107,7 @@ $(function () {
             if(json.isTrue) {
               console.log("i am firstplayer");
               document.getElementById("startGame").addEventListener("click", () => {
-                connection.send(JSON.stringify({type: 'startGame', isTrue: 'true'}));
+                if(playerCount >= 2) connection.send(JSON.stringify({type: 'startGame', isTrue: 'true'}));
               });
             }
         } else {
