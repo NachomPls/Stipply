@@ -19,7 +19,7 @@ class Game {
     endRound() {
         // show word, do scoreboard
 
-        if (this.round < 3) {
+        if (this.round < 5) {
             this.nextRound()
         }
     }

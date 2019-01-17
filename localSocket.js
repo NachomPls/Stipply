@@ -45,7 +45,7 @@ $(function () {
             // let the user write another message
             addMessage(json.data.author, json.data.text);
         } else if(json.type === "draw") {
-            console.log("recieved draw");
+            console.log("received draw");
             console.log(json.data);
             if (json.data.type === "brush") {
                 strokeWeight(json.data.strokeWeight);
