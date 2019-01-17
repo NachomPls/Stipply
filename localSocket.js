@@ -51,7 +51,7 @@ $(function () {
                 strokeWeight(json.data.strokeWeight);
                 stroke(json.data.color);
                 line(json.data.mouseX, json.data.mouseY, json.data.pmouseX, json.data.pmouseY);
-            } else if (json.data.type == "bucket") {
+            } else if (json.data.type === "bucket") {
                 brushColour = json.data.color;
                 floodFill(json.data.mouseX, json.data.mouseY);
             } else if (json.data.type === "clear") {
@@ -59,7 +59,7 @@ $(function () {
                 background(255);
             }
         } else if(json.type === "drawHistory") {
-            console.log("recieved drawHistory");
+            console.log("received drawHistory");
             for (let i = 0; i < json.data.length; i++) {
                 if (json.data[i].type === "brush") {
                     strokeWeight(json.data[i].strokeWeight);
@@ -86,6 +86,9 @@ $(function () {
         } else if(json.type === "index"){
             console.log(json);
             $("#player_"+json.index).css("color","red");
+        } else if (json.type === "setWord") {
+            $("#word-to-draw").text(json.data)
+                //TODO STUFF
         } else {
             console.log('Excuse me what the fuck?: ', json);
         }

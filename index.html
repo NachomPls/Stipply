@@ -4,6 +4,10 @@
     <meta charset="utf-8">
     <script src="p5/p5.js" charset="utf-8"></script>
     <script src="jquery.js" charset="utf-8"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.7.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.7.3/firebase-firestore.js"></script>
+    <script src="database.js" charset="utf-8"></script>
+    <script src="gameLoop.js" charset="utf-8"></script>
     <script src="sketch.js" charset="utf-8"></script>
     <script src="localSocket.js" charset="utf-8"></script>
     <link rel="stylesheet" href="chat.css">
@@ -12,7 +16,8 @@
     <title></title>
   </head>
   <body>
-
+    
+    <div id="word-to-draw"></div>
     <div id="canvasHolder"></div>
 
     <div id="toolHolder">
@@ -65,9 +70,8 @@
 
     <div  id="boardHolder">
       <div id="players">
-
+    
       </div>
     </div>
-
   </body>
 </html>

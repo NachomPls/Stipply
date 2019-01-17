@@ -18,6 +18,10 @@
   },
   "homepage": "https://github.com/NachomPls/Stipply#readme",
   "dependencies": {
+    "firebase": "^5.7.3",
+    "firebase-admin": "^6.5.0",
+    "firebase-functions": "^2.1.0",
+    "requirejs": "^2.3.6",
     "websocket": "^1.0.28"
   }
 }

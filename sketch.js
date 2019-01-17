@@ -20,8 +20,10 @@ function init() {
         highlightTool(); });
     document.getElementById("clearCanvas").addEventListener("click", () => { select("clearCanvas") });
     //makes slider appear/disappear on click
-    document.getElementById("adjustBrush").addEventListener("click", () => { toggleSlide('slider', 'sliderLabel')});
-    document.getElementById("sliderLabel").addEventListener("click", () => { toggleSlide('slider', 'sliderLabel')});
+    document.getElementById("adjustBrush").addEventListener("click", () => { toggleSlide('slider',
+        'sliderLabel')});
+    document.getElementById("sliderLabel").addEventListener("click", () => { toggleSlide('slider',
+        'sliderLabel')});
 
     //get colour utility
     const util = document.getElementsByClassName("utilities")[2];
