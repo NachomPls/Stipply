@@ -141,12 +141,17 @@ wsServer.on('request', function (request) {
     clients.push(obj) //neuen client dranhängen.
     index = indexCount;
     indexCount++;
-  } else { //sind freie Id's da wird eine raus gepoped (benutzt und entfernt von freeId).
+  } else { //sind freie Id's da wird eine raus gepoped (benutzt und entfernt von freeIndex).
     index = freeIndex.pop();
     clients[index] = obj; //Der platz wird eingenohmen anstelle dazu gepushed zu werden.
   }
   clients[index].index = index;
   // TODO
+
+  console.log("DEBUG:");
+  console.log("clients: "+clients.length);
+  console.log("freIndex: "+freeIndex.length);
+  if(clients.length === (freeIndex.length+1)) connection.sendUTF(JSON.stringify({ type: 'firstPlayer', isTrue: 'true'}));
 
   generateWord(randomWord)
       .then(word => {
@@ -215,12 +220,6 @@ wsServer.on('request', function (request) {
         }
         console.log("This is the index Nr: " + index);
         clients[index].connection.sendUTF(JSON.stringify({ type: 'index', index: index }));
-      } else if (message_json.type === "message") {
-        let json = JSON.stringify({ type: 'playerJoined', data: obj }); //wenn jemand ein namen hat, hat er auch offiezel gejoined, also info für alle anderen
-        for (let i = 0; i < clients.length; i++) {
-          clients[i].connection.sendUTF(json);
-        }
-        clients[index].connection.sendUTF(JSON.stringify({ type: 'index', index: index })); //<- i have no idea anymore why this is here, schaut tbh sehr unötig aus
       } else if (message_json.type === "message") { // chat nachricht
         // log and broadcast the message
         console.log((new Date()) + ' Received Message from ' + userName + ': ' + message_json.data);

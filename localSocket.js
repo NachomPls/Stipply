@@ -89,6 +89,8 @@ $(function () {
         } else if (json.type === "setWord") {
             $("#word-to-draw").text(json.data)
                 //TODO STUFF
+        } else if (json.type === "firstPlayer") {
+            console.log("i am firstplayer");
         } else {
             console.log('Excuse me what the fuck?: ', json);
         }
