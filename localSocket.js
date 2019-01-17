@@ -91,6 +91,10 @@ $(function () {
                 //TODO STUFF
         } else if (json.type === "firstPlayer") {
             console.log("i am firstplayer");
+            document.getElementById("startGame").addEventListener("click", () => {
+                var gameInstance = new Game(doener)
+            });
+
         } else {
             console.log('Excuse me what the fuck?: ', json);
         }

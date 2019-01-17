@@ -1,6 +1,7 @@
 class Game {
 
-    constructor() {
+    constructor(players) {
+
         this.currentWord = "";
         this.round = 0;
         this.timer = null;
