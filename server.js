@@ -129,7 +129,7 @@ wsServer.on('request', function (request) {
   // we need to know client index to remove them on 'close' event
   let userName = false;
   let score = false;
-  let Player = {
+  let obj = {
     connection: connection, //in connection sind die sende funktion von jedem client. Like clients[i].connection.sendUTF("lol") => i kriegt jetzt lol.
     userName: userName,
     score: score,
@@ -138,15 +138,14 @@ wsServer.on('request', function (request) {
   //hier kriegt er jetzt nen index. Dunno ob er wirklich nötig is, es is aber leichter für mich zu hantieren.. like hier und im js dann.
   let index;
   if (!(freeIndex > 0)) { //gibts keine freie Id aka es gibt clients von 0...n dann bekommt der nächste n+1.
-    clients.push(Player); //neuen client dranhängen.
+    clients.push(obj) //neuen client dranhängen.
     index = indexCount;
     indexCount++;
   } else { //sind freie Id's da wird eine raus gepoped (benutzt und entfernt von freeId).
     index = freeIndex.pop();
-    clients[index] = Player; //Der platz wird eingenohmen anstelle dazu gepushed zu werden.
+    clients[index] = obj; //Der platz wird eingenohmen anstelle dazu gepushed zu werden.
   }
   clients[index].index = index;
-
   // TODO
 
   generateWord(randomWord)
@@ -154,13 +153,15 @@ wsServer.on('request', function (request) {
         const placeholder = word.split("").map(() => "_").join(" ");
 
         clients.forEach((client, index) => {
-          if (index === 1) {
+          if (index < 1) {
             client.connection.sendUTF(JSON.stringify({ type: 'setWord', data: word }))
           } else {
             client.connection.sendUTF(JSON.stringify({ type: 'setWord', data: placeholder }))
           }
         });
       });
+
+  // //
 
   //Log log log lol
   console.log((new Date()) + ' Connection accepted.');
@@ -253,15 +254,15 @@ wsServer.on('request', function (request) {
   connection.on('close', function (connection) { //Wenn sich ein spieler schleicht
     if (clients[index].userName !== false) { //nur wenn der schon den alert beantwortet hat. (mir fällt auch das hier noch eine condition hin muss falls er noch keinen hat :thinking:)
       console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected.");
-
+      let json = JSON.stringify({
+        type: 'playerLeft', data: {
+          name: clients[index].userName,
+          score: clients[index].score,
+          index: index
+        }
+      });
       for (let i = 0; i < clients.length; i++) {
-        let json = JSON.stringify({
-          type: 'playerLeft', data: {
-            name: clients[index].userName,
-            score: clients[index].score,
-            index: index
-          }
-        });
+        let json = JSON.stringify({ type: 'playerLeft', data: { name: clients[index].userName, score: clients[index].score, index: index } });
         for (let i = 0; i < clients.length; i++) { //An alle verteilen das einer weg is
           clients[i].connection.sendUTF(json);
         }
@@ -271,4 +272,6 @@ wsServer.on('request', function (request) {
       }
     }
   })
-});
+})
+
+//hi
