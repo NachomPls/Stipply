@@ -258,18 +258,9 @@ wsServer.on('request', function (request) {
   connection.on('close', function (connection) { //Wenn sich ein spieler schleicht
     if (clients[index].userName !== false) { //nur wenn der schon den alert beantwortet hat. (mir fällt auch das hier noch eine condition hin muss falls er noch keinen hat :thinking:)
       console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected.");
-      let json = JSON.stringify({
-        type: 'playerLeft', data: {
-          name: clients[index].userName,
-          score: clients[index].score,
-          index: index
-        }
-      });
       for (let i = 0; i < clients.length; i++) {
         let json = JSON.stringify({ type: 'playerLeft', data: { name: clients[index].userName, score: clients[index].score, index: index } });
-        for (let i = 0; i < clients.length; i++) { //An alle verteilen das einer weg is
-          clients[i].connection.sendUTF(json);
-        }
+        clients[i].connection.sendUTF(json);
         freeIndex.push(index); //die benutze Id freigeben
         clients[index].userName = false; //und die werte entfernen
         clients[index].score = false;
