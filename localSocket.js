@@ -90,11 +90,12 @@ $(function () {
             $("#word-to-draw").text(json.data)
                 //TODO STUFF
         } else if (json.type === "firstPlayer") {
-            console.log("i am firstplayer");
-            document.getElementById("startGame").addEventListener("click", () => {
-                var gameInstance = new Game(doener)
-            });
-
+            if(json.isTrue) {
+              console.log("i am firstplayer");
+              document.getElementById("startGame").addEventListener("click", () => {
+                connection.send(JSON.stringify({type: 'startGame', isTrue: 'true'}));
+              });
+            }
         } else {
             console.log('Excuse me what the fuck?: ', json);
         }

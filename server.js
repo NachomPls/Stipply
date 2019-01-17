@@ -245,6 +245,8 @@ wsServer.on('request', function (request) {
         for (let i = 0; i < clients.length; i++) { //Unnnnned wieder verteilen, like maybe i should write a function that does this for how often we use it :thiking:
           if (i !== index) clients[i].connection.sendUTF(message.utf8Data); // wird an alle auser sich geschickt, weil das zeichnen local passiert (aus performance gründen), vergleichweise geht der chat zum server und zum sendenden client zurück
         }
+      } else if (message_json.type === 'startGame') {
+        console.log("DEBUG START GAME");
       }
     }
   });
