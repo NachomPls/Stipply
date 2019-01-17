@@ -2,7 +2,6 @@
 
 //get firebase functions and functionality
 const admin = require('firebase-admin');
-const firebase = require('firebase');
 const serviceAccount = require('./stipply-firebase-key.json');
 
 //initialize firebase
@@ -79,11 +78,10 @@ function generateWord(category) {
         const rng = Math.floor(Math.random() * max) + 1;
         return categorySnap.get(rng.toString())
       }) // wait
-} //auf bessere zeiten?
-
-//TODO MAKE A RANDOM WORD CHOOSER OR SOMETHING
+}
 
 ////TODO DATABASE STOPS HERE
+
 // Port where we'll run the websocket server
 let webSocketsServerPort = 1337;
 
@@ -98,6 +96,9 @@ let clients = []; // Da sind Daten von allen spielern drin
 let freeIndex = []; // Unbenutze Id's die mindestens schon 1 mal verwendet werden. Die werden also wiederverwendet
 let indexCount = 0; // Zum vergeben von neuen indexen. Das passiert aber nur wenn freeIndex leer is.
 
+//var for game instance
+let fuckingwork = require('./gameLoop.js');
+let gameInstance;
 
 // Helper function for escaping input strings
 function htmlEntities(str) {
@@ -247,6 +248,8 @@ wsServer.on('request', function (request) {
         }
       } else if (message_json.type === 'startGame') {
         console.log("DEBUG START GAME");
+        gameInstance = new fuckingwork.Game(clients);
+
       }
     }
   });
