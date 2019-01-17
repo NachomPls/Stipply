@@ -1,4 +1,5 @@
 let connection;
+let playerCount = 0;
 
 $(function () {
     "use strict";
@@ -71,16 +72,29 @@ $(function () {
                 }
             }
         } else if(json.type === "players"){
+          console.log("players:");
             let playerListElement = $("#players");
             for (let i = 0; i < json.data.length; i++) {
+                console.log("players in for");
+                playerCount++;
                 console.log(json.data[i]);
                 playerListElement.append("<div id='player_"+json.data[i].index+"'>"+json.data[i].name+"</div>")
             }
         } else if(json.type === "playerJoined"){
+          console.log("playerJoined: ");
+            playerCount++;
+            //update button visual HERE
+
+            //End
             console.log(json.data);
             let playerListElement = $("#players");
             playerListElement.append("<div id='player_"+json.data.index+"'>"+json.data.name+"</div>")
         } else if(json.type === "playerLeft"){
+            console.log("playerleft: ");
+            playerCount--;
+            //update button visual HERE
+
+            //End
             console.log(json.data);
             $("#player_"+json.data.index).remove();
         } else if(json.type === "index"){
