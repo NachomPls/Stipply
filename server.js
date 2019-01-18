@@ -139,7 +139,7 @@ wsServer.on('request', function (request) {
   //hier kriegt er jetzt nen index. Dunno ob er wirklich nötig is, es is aber leichter für mich zu hantieren.. like hier und im js dann.
   let index;
   if (!(freeIndex > 0)) { //gibts keine freie Id aka es gibt clients von 0...n dann bekommt der nächste n+1.
-    clients.push(obj) //neuen client dranhängen.
+    clients.push(obj); //neuen client dranhängen.
     index = indexCount;
     indexCount++;
   } else { //sind freie Id's da wird eine raus gepoped (benutzt und entfernt von freeIndex).
@@ -249,7 +249,7 @@ wsServer.on('request', function (request) {
       } else if (message_json.type === 'startGame') {
         console.log("DEBUG START GAME");
         //TODO only show this to first person
-        gameInstance = new Game.Game(clients);
+        gameInstance = new Game(clients)
       }
     }
   });

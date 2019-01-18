@@ -4,7 +4,7 @@ let playerCount = 0;
 //returns a random avatar picture to use in the scoreboard
 let images = ['avatar1.png', 'avatar2.png', 'avatar3.png',
     'avatar4.png', 'avatar5.png', 'avatar6.png'];
-function randomAvatar(number) {
+function randomAvatar() {
     return "./img/" + images[Math.floor(Math.random() * images.length)];
 }
 
@@ -97,7 +97,7 @@ $(function () {
             let playerListElement = $("#players");
             playerListElement.append("<div id='player_"+json.data.index+"'>"+json.data.name+"</div>");
             let img = document.createElement("img");
-            img.src = randomAvatar(json.data.index);
+            img.src = randomAvatar();
             let src = document.getElementById("player_"+json.data.index);
             src.appendChild(img);
         } else if(json.type === "playerLeft"){
@@ -116,17 +116,17 @@ $(function () {
         } else if (json.type === "firstPlayer") {
             if(json.isTrue) {
               console.log("i am firstplayer");
-                if(playerCount >= 2) {
-                    connection.send(JSON.stringify({type: 'startGame', isTrue: 'true'}));
 
                     document.getElementById("startGame").addEventListener("click", () => {
-                        //TODO make it disappear for all clients
-                        //TODO probably needs to be on server but that doesnt work yet
-                        console.log("this button has been pressed");
-                        let elem = document.getElementById("startGame");
-                        elem.parentNode.removeChild(elem);
+                        if(playerCount >= 2) {
+                            connection.send(JSON.stringify({type: 'startGame', isTrue: 'true'}));
+                            //TODO make it disappear for all clients
+                            //TODO probably needs to be on server but that doesnt work yet
+                            console.log("this button has been pressed");
+                            let elem = document.getElementById("startGame");
+                            elem.parentNode.removeChild(elem);
+                        }
                     });
-                }
             }
         } else {
             console.log('Excuse me what the fuck?: ', json);
