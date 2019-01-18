@@ -136,7 +136,6 @@ $(function () {
             }
         } else if (json.type === "drawerChanged") {
           console.log(json.data);
-
         } else {
             console.log('Excuse me what the fuck?: ', json);
         }

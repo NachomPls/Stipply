@@ -95,6 +95,7 @@ let drawHistory = []; //Alle aktionen vom zeichnen her.
 let clients = []; // Da sind Daten von allen spielern drin
 let freeIndex = []; // Unbenutze Id's die mindestens schon 1 mal verwendet werden. Die werden also wiederverwendet
 let indexCount = 0; // Zum vergeben von neuen indexen. Das passiert aber nur wenn freeIndex leer is.
+let isDrawerIndex = 0;
 
 //var for game instance
 let Game = require('./gameLoop.js');
@@ -155,6 +156,7 @@ wsServer.on('request', function (request) {
   console.log("freIndex: "+freeIndex.length);
   if(clients.length === (freeIndex.length+1)) {
     clients[index].isDrawer = true;
+    isDrawerIndex = index;
     connection.sendUTF(JSON.stringify({ type: 'firstPlayer', isTrue: 'true'}));
   } else {
     clients[index].isDrawer = false;
@@ -258,7 +260,7 @@ wsServer.on('request', function (request) {
       } else if (message_json.type === 'startGame') {
         console.log("DEBUG START GAME");
         //TODO only show this to first person
-        gameInstance = new Game(clients)
+        gameInstance = new Game(clients);
       }
     }
   });
