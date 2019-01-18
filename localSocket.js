@@ -1,5 +1,7 @@
 let connection;
 let playerCount = 0;
+let amIDrawer = false;
+let myIndex = false;
 
 //returns a random avatar picture to use in the scoreboard
 let images = ['avatar1.png', 'avatar2.png', 'avatar3.png',
@@ -114,6 +116,7 @@ $(function () {
             console.log(json.data);
             $("#player_"+json.data.index).remove();
         } else if(json.type === "index"){
+            myIndex = json.index;
             console.log(json);
             $("#player_"+json.index).css("color","red");
         } else if (json.type === "setWord") {
@@ -122,6 +125,7 @@ $(function () {
         } else if (json.type === "firstPlayer") {
             if(json.isTrue) {
               console.log("i am firstplayer");
+              amIDrawer = true;
 
                     document.getElementById("startGame").addEventListener("click", () => {
                         if(playerCount >= 2) {
@@ -136,6 +140,9 @@ $(function () {
             }
         } else if (json.type === "drawerChanged") {
           console.log(json.data);
+          if(json.data.newIndex === myIndex) amIDrawer = true;
+          else amIDrawer = false;
+          console.log("am i drawer?: "+amIDrawer);
         } else {
             console.log('Excuse me what the fuck?: ', json);
         }

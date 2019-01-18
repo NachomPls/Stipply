@@ -73,15 +73,17 @@ function select(toolName) {
       break;
       //clearCanvas isn't a real tool but needs to be selected anyway
     case "clearCanvas":
-        clear();
-        background(255);
-        ink = startInk;
-        console.log("clear");
-        let obj = {
+        if(amIDrawer) {
+          clear();
+          background(255);
+          ink = startInk;
+          console.log("clear");
+          let obj = {
             type: 'clear'
-        };
-        let json = JSON.stringify({ type:'draw', data: obj });
-        connection.send(json);
+          };
+          let json = JSON.stringify({ type:'draw', data: obj });
+          connection.send(json);
+        }
         break;
     default: console.error("lol 404");
   }
@@ -135,27 +137,29 @@ function adjustedStrokeWeight () {
 
 function mouseDragged()
 {
-	strokeWeight(adjustedStrokeWeight());
-	if(!(ink <= 0) && (activeTool === "brush")) {
-    stroke(brushColour);
-    line(mouseX, mouseY, pmouseX, pmouseY);
-    ink--;
-    let obj = {
-      type: activeTool,
-      strokeWeight: adjustedStrokeWeight(),
-      mouseX: Math.round(mouseX),
-      mouseY: Math.round(mouseY),
-      pmouseX: Math.round(pmouseX),
-      pmouseY: Math.round(pmouseY),
-      color: brushColour
-    };
-    let json = JSON.stringify({ type:'draw', data: obj });
-    connection.send(json);
+  if(amIDrawer) {
+    strokeWeight(adjustedStrokeWeight());
+    if(!(ink <= 0) && (activeTool === "brush")) {
+      stroke(brushColour);
+      line(mouseX, mouseY, pmouseX, pmouseY);
+      ink--;
+      let obj = {
+        type: activeTool,
+        strokeWeight: adjustedStrokeWeight(),
+        mouseX: Math.round(mouseX),
+        mouseY: Math.round(mouseY),
+        pmouseX: Math.round(pmouseX),
+        pmouseY: Math.round(pmouseY),
+        color: brushColour
+      };
+      let json = JSON.stringify({ type:'draw', data: obj });
+      connection.send(json);
+    }
   }
 }
 
 function mousePressed() {
-  if(activeTool === "bucket") {
+  if(activeTool === "bucket" && amIDrawer) {
     //setup
     let mousePos = {
       x: Math.round(mouseX),
