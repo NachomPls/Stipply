@@ -86,6 +86,12 @@ $(function () {
                 playerCount++;
                 console.log(json.data[i]);
                 playerListElement.append("<div id='player_"+json.data[i].index+"'>"+json.data[i].name+"</div>")
+
+                let img = document.createElement("img");
+                img.src = "./img/avatar"+(json.data[i].index+1)+".png";
+                // img.src = randomAvatar();
+                let src = document.getElementById("player_"+json.data[i].index);
+                src.appendChild(img);
             }
         } else if(json.type === "playerJoined"){
           console.log("playerJoined: ");
@@ -97,7 +103,8 @@ $(function () {
             let playerListElement = $("#players");
             playerListElement.append("<div id='player_"+json.data.index+"'>"+json.data.name+"</div>");
             let img = document.createElement("img");
-            img.src = randomAvatar();
+            img.src = "./img/avatar"+(json.data.index+1)+".png";
+            // img.src = randomAvatar();
             let src = document.getElementById("player_"+json.data.index);
             src.appendChild(img);
         } else if(json.type === "playerLeft"){
