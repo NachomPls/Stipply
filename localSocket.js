@@ -97,9 +97,8 @@ $(function () {
             //updating current player Count on button for HTML
             //TODO TODO
 
-            if (json.type === "firstPlayer") {
-                document.getElementById("startGame").innerHTML = "Press me to start! Players: " + playerCount;
-            }
+            if(myIndex === 0) document.getElementById("startGame").innerHTML = "Press me to start! Players: " + playerCount;
+
             console.log(json.data);
             let playerListElement = $("#players");
             playerListElement.append("<div id='player_"+json.data.index+"'>"+json.data.name+"</div>");
