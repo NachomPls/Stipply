@@ -125,6 +125,9 @@ $(function () {
         } else if (json.type === "firstPlayer") {
             if(json.isTrue) {
               console.log("i am firstplayer");
+              let elem = document.createElement("div");
+              elem.setAttribute("id", "startGame");
+              document.getElementById("inputField").appendChild(elem);
               amIDrawer = true;
 
                     document.getElementById("startGame").addEventListener("click", () => {
