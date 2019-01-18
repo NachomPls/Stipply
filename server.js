@@ -248,8 +248,8 @@ wsServer.on('request', function (request) {
         }
       } else if (message_json.type === 'startGame') {
         console.log("DEBUG START GAME");
+        //TODO only show this to first person
         gameInstance = new fuckingwork.Game(clients);
-
       }
     }
   });
@@ -267,6 +267,4 @@ wsServer.on('request', function (request) {
       }
     }
   })
-})
-
-//hi
+});

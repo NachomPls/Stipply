@@ -83,18 +83,16 @@ $(function () {
         } else if(json.type === "playerJoined"){
           console.log("playerJoined: ");
             playerCount++;
-            //update button visual HERE
-
-            //End
+            //updating current player Count on button for HTML
+            document.getElementById("startGame").innerHTML = "Press me to start! Players: " + playerCount;
             console.log(json.data);
             let playerListElement = $("#players");
             playerListElement.append("<div id='player_"+json.data.index+"'>"+json.data.name+"</div>")
         } else if(json.type === "playerLeft"){
             console.log("playerleft: ");
             playerCount--;
-            //update button visual HERE
-
-            //End
+            //updating current player Count on button for HTML
+            document.getElementById("startGame").innerHTML = "Press me to start! Players: " + playerCount;
             console.log(json.data);
             $("#player_"+json.data.index).remove();
         } else if(json.type === "index"){
@@ -108,6 +106,11 @@ $(function () {
               console.log("i am firstplayer");
               document.getElementById("startGame").addEventListener("click", () => {
                 if(playerCount >= 2) connection.send(JSON.stringify({type: 'startGame', isTrue: 'true'}));
+                    //TODO make it disappear for all clients
+                  //TODO probably needs to be on server but that doesnt work yet
+                  console.log("this button has been pressed");
+                  let elem = document.getElementById("startGame");
+                  elem.parentNode.removeChild(elem);
               });
             }
         } else {

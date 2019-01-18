@@ -27,6 +27,16 @@
   top: 510px;
 }
 
+#startGame {
+  margin-top: 5px;
+  background-color: #e6510a;
+  padding: 3px;
+  margin-left: 9px;
+  display: inline-block;
+  border: 2px solid black;
+  cursor: pointer;
+}
+
 #input {
   position: relative;
   border-radius:2px;

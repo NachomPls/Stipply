@@ -7,9 +7,9 @@
     <script src="https://www.gstatic.com/firebasejs/5.7.3/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.7.3/firebase-firestore.js"></script>
     <script src="database.js" charset="utf-8"></script>
-    <script src="gameLoop.js" charset="utf-8"></script>
     <script src="sketch.js" charset="utf-8"></script>
     <script src="localSocket.js" charset="utf-8"></script>
+    <script src="gameLoop.js" charset="utf-8"></script>
     <link rel="stylesheet" href="chat.css">
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="scoreboard.css">
@@ -17,7 +17,7 @@
   </head>
   <body>
     
-    <div id="word-to-draw"></div>
+    <div id="word-to-draw">in here on the left will be a timer</div>
     <div id="canvasHolder"></div>
 
     <div id="toolHolder">
@@ -58,11 +58,8 @@
       <div class="utilities" id="colour">
         Colours
       </div>
-      <div class="utilities" id="startGame">
-        Start The Game!
-      </div>
       <div class="utilities" id="counter">
-
+        Counter Placeholder
       </div>
     </div>
 
@@ -71,6 +68,9 @@
       <div id="inputField">
         <label for="input">Guess:</label>
         <input type="text" id="input"/>
+        <div id="startGame">
+          Start The Game!
+        </div>
       </div>
 
 

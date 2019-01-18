@@ -1,8 +1,6 @@
-module.exports.Game =
-class Game {
-
+module.exports.Game = class Game {
     constructor(players) {
-
+        console.log("the constructor has been called!");
         this.currentWord = "";
         this.round = 0;
         this.timer();
@@ -14,6 +12,7 @@ class Game {
     }
 
     timer() {
+        //TODO actually implement the timer with all the things necessay
         var count = 30;
         setInterval(function() {
             $("#counter").html(count--);
