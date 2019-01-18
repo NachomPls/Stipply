@@ -1,54 +1,54 @@
 #content {
-  position: absolute;
-  top: 0;
-  padding:5px;
-  background: #e3edef;
-  border-radius:5px;
-  overflow-y: scroll;
-  border:1px solid #CCC;
-  margin-top: 15px;
-  margin-left:8px;
-  height: 500px;
-  width: 23%;
-  -ms-word-wrap: break-word;
-  word-wrap: break-word;
-  line-height: 1;
+    position: absolute;
+    top: 0;
+    padding:5px;
+    background: #e3edef;
+    border-radius:5px;
+    overflow-y: scroll;
+    border:1px solid #CCC;
+    margin-top: 15px;
+    margin-left:8px;
+    height: 500px;
+    width: 23%;
+    -ms-word-wrap: break-word;
+    word-wrap: break-word;
+    line-height: 1;
 }
 
 #inputField {
-  border-radius:2px;
-  border:2px solid #afc1c9;
-  background: #afc1c9;
-  margin-top:5px;
-  padding:5px;
-  width: 23%;
-  margin-left:8px;
-  position: absolute;
-  top: 510px;
+    border-radius:2px;
+    border:2px solid #afc1c9;
+    background: #afc1c9;
+    margin-top:5px;
+    padding:5px;
+    width: 23%;
+    margin-left:8px;
+    position: absolute;
+    top: 510px;
 }
 
 #startGame {
-  margin-top: 5px;
-  background-color: #e6510a;
-  padding: 3px;
-  margin-left: 9px;
-  display: inline-block;
-  border: 2px solid black;
-  cursor: pointer;
+    margin-top: 5px;
+    background-color: #e6510a;
+    padding: 3px;
+    margin-left: 9px;
+    display: inline-block;
+    border: 2px solid black;
+    cursor: pointer;
 }
 
 #input {
-  position: relative;
-  border-radius:2px;
-  border:2px solid #000;
-  padding:5px;
-  width: 90%;
-  margin-left:10px;
+    position: relative;
+    border-radius:2px;
+    border:2px solid #000;
+    padding:5px;
+    width: 90%;
+    margin-left:10px;
 }
 
 #status {
-  position: relative;
-  width:88px;
-  display:block;
-  float:left;
+    position: relative;
+    width:88px;
+    display:block;
+    float:left;
 }

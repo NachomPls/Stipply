@@ -97,7 +97,7 @@ let freeIndex = []; // Unbenutze Id's die mindestens schon 1 mal verwendet werde
 let indexCount = 0; // Zum vergeben von neuen indexen. Das passiert aber nur wenn freeIndex leer is.
 
 //var for game instance
-let fuckingwork = require('./gameLoop.js');
+let Game = require('./gameLoop.js');
 let gameInstance;
 
 // Helper function for escaping input strings
@@ -249,7 +249,7 @@ wsServer.on('request', function (request) {
       } else if (message_json.type === 'startGame') {
         console.log("DEBUG START GAME");
         //TODO only show this to first person
-        gameInstance = new fuckingwork.Game(clients);
+        gameInstance = new Game.Game(clients);
       }
     }
   });

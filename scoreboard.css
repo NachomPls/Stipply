@@ -15,10 +15,20 @@
 }
 
 #players > div {
-    background: #ffcc94;
-    border: 2px solid #ffce86;
-    margin-bottom: 15px;
+    /*TODO make container same height as cute cats :> and not make them overflow holy*/
+    background: rgba(126, 126, 139, 0.41);
+    border: 2px solid rgba(122, 121, 139, 0.6);
     opacity: 0.7;
+    min-height: 75px;
+    min-width: 69px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#players > div > img {
+    max-height: 75px;
+    max-width: 69px;
+    float: left;
 }
 
 @media (max-width: 70em) {

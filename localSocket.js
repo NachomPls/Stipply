@@ -1,6 +1,13 @@
 let connection;
 let playerCount = 0;
 
+//returns a random avatar picture to use in the scoreboard
+let images = ['avatar1.png', 'avatar2.png', 'avatar3.png',
+    'avatar4.png', 'avatar5.png', 'avatar6.png'];
+function randomAvatar(number) {
+    return "./img/" + images[Math.floor(Math.random() * images.length)];
+}
+
 $(function () {
     "use strict";
     // for better performance - to avoid searching in DOM
@@ -84,10 +91,15 @@ $(function () {
           console.log("playerJoined: ");
             playerCount++;
             //updating current player Count on button for HTML
+            //TODO TODO
             document.getElementById("startGame").innerHTML = "Press me to start! Players: " + playerCount;
             console.log(json.data);
             let playerListElement = $("#players");
-            playerListElement.append("<div id='player_"+json.data.index+"'>"+json.data.name+"</div>")
+            playerListElement.append("<div id='player_"+json.data.index+"'>"+json.data.name+"</div>");
+            let img = document.createElement("img");
+            img.src = randomAvatar(json.data.index);
+            let src = document.getElementById("player_"+json.data.index);
+            src.appendChild(img);
         } else if(json.type === "playerLeft"){
             console.log("playerleft: ");
             playerCount--;
@@ -104,14 +116,17 @@ $(function () {
         } else if (json.type === "firstPlayer") {
             if(json.isTrue) {
               console.log("i am firstplayer");
-              document.getElementById("startGame").addEventListener("click", () => {
-                if(playerCount >= 2) connection.send(JSON.stringify({type: 'startGame', isTrue: 'true'}));
-                    //TODO make it disappear for all clients
-                  //TODO probably needs to be on server but that doesnt work yet
-                  console.log("this button has been pressed");
-                  let elem = document.getElementById("startGame");
-                  elem.parentNode.removeChild(elem);
-              });
+                if(playerCount >= 2) {
+                    connection.send(JSON.stringify({type: 'startGame', isTrue: 'true'}));
+
+                    document.getElementById("startGame").addEventListener("click", () => {
+                        //TODO make it disappear for all clients
+                        //TODO probably needs to be on server but that doesnt work yet
+                        console.log("this button has been pressed");
+                        let elem = document.getElementById("startGame");
+                        elem.parentNode.removeChild(elem);
+                    });
+                }
             }
         } else {
             console.log('Excuse me what the fuck?: ', json);

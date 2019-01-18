@@ -1,4 +1,5 @@
-module.exports.Game = class Game {
+ //make it so this ACTUALLY works lol
+ module.exports = class Game {
     constructor(players) {
         console.log("the constructor has been called!");
         this.currentWord = "";
@@ -22,12 +23,12 @@ module.exports.Game = class Game {
 
 
     nextRound() {
-        setTimeout(this.endRound, 10000);
         this.round++;
         this.timer = setTimeout(this.endRound, 60000)
     }
 
     endRound() {
+        setTimeout(this.endRound, 10000);
         // show word, do scoreboard
 
         if (this.round < 5) {
