@@ -13,7 +13,6 @@ $(function () {
     // for better performance - to avoid searching in DOM
     let content = $('#content');
     let input = $('#input');
-    let status = $('#status');
 
     // if browser doesn't support WebSocket, just show
     // some notification and exit
@@ -30,7 +29,7 @@ $(function () {
         getName();
     };
 
-    connection.onerror = function (error) {
+    connection.onerror = function () {
         // just in there were some problems with connection...
         alert('Sorry, but there\'s some problem with your connection or the server is down.');
     };
@@ -135,6 +134,9 @@ $(function () {
                         }
                     });
             }
+        } else if (json.type === "drawerChanged") {
+          console.log(json.data);
+
         } else {
             console.log('Excuse me what the fuck?: ', json);
         }
