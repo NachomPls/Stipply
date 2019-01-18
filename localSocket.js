@@ -6,9 +6,6 @@ let myIndex = false;
 //returns a random avatar picture to use in the scoreboard
 let images = ['avatar1.png', 'avatar2.png', 'avatar3.png',
     'avatar4.png', 'avatar5.png', 'avatar6.png'];
-function randomAvatar() {
-    return "./img/" + images[Math.floor(Math.random() * images.length)];
-}
 
 $(function () {
     "use strict";
@@ -86,7 +83,7 @@ $(function () {
                 console.log("players in for");
                 playerCount++;
                 console.log(json.data[i]);
-                playerListElement.append("<div id='player_"+json.data[i].index+"'>"+json.data[i].name+"</div>")
+                playerListElement.append("<div id='player_"+json.data[i].index+"'>"+json.data[i].name+"</div>");
 
                 let img = document.createElement("img");
                 img.src = "./img/avatar"+(json.data[i].index+1)+".png";
@@ -99,7 +96,10 @@ $(function () {
             playerCount++;
             //updating current player Count on button for HTML
             //TODO TODO
-            document.getElementById("startGame").innerHTML = "Press me to start! Players: " + playerCount;
+
+            if (json.type === "firstPlayer") {
+                document.getElementById("startGame").innerHTML = "Press me to start! Players: " + playerCount;
+            }
             console.log(json.data);
             let playerListElement = $("#players");
             playerListElement.append("<div id='player_"+json.data.index+"'>"+json.data.name+"</div>");
@@ -124,11 +124,12 @@ $(function () {
                 //TODO STUFF
         } else if (json.type === "firstPlayer") {
             if(json.isTrue) {
-              console.log("i am firstplayer");
-              let elem = document.createElement("div");
-              elem.setAttribute("id", "startGame");
-              document.getElementById("inputField").appendChild(elem);
-              amIDrawer = true;
+                  console.log("i am firstplayer");
+                  let elem = document.createElement("div");
+                  elem.setAttribute("id", "startGame");
+                  document.getElementById("inputField").appendChild(elem);
+                document.getElementById("startGame").innerHTML = "Press me to start! Players: " + playerCount;
+                amIDrawer = true;
 
                     document.getElementById("startGame").addEventListener("click", () => {
                         if(playerCount >= 2) {
@@ -143,8 +144,7 @@ $(function () {
             }
         } else if (json.type === "drawerChanged") {
           console.log(json.data);
-          if(json.data.newIndex === myIndex) amIDrawer = true;
-          else amIDrawer = false;
+          amIDrawer = json.data.newIndex === myIndex;
           console.log("am i drawer?: "+amIDrawer);
         } else {
             console.log('Excuse me what the fuck?: ', json);
