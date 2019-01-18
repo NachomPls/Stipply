@@ -12,13 +12,10 @@
         this.nextRound()
     }
 
+
     timer() {
-        //TODO actually implement the timer with all the things necessay
-        var count = 30;
-        setInterval(function() {
-            $("#counter").html(count--);
-            if(count === 1) clearInterval(timer);
-        }, 1000);
+        //TODO actually implement the timer with all the things neccessay
+        setTimeout(function (){alert("round over!");}, 60000);
     }
 
 
@@ -28,6 +25,7 @@
     }
 
     endRound() {
+
         setTimeout(this.endRound, 10000);
         // show word, do scoreboard
 
