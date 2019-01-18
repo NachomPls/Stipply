@@ -1,5 +1,7 @@
 let connection;
 let playerCount = 0;
+let amIDrawer = false;
+let myIndex = false;
 
 //returns a random avatar picture to use in the scoreboard
 let images = ['avatar1.png', 'avatar2.png', 'avatar3.png',
@@ -13,7 +15,6 @@ $(function () {
     // for better performance - to avoid searching in DOM
     let content = $('#content');
     let input = $('#input');
-    let status = $('#status');
 
     // if browser doesn't support WebSocket, just show
     // some notification and exit
@@ -30,7 +31,7 @@ $(function () {
         getName();
     };
 
-    connection.onerror = function (error) {
+    connection.onerror = function () {
         // just in there were some problems with connection...
         alert('Sorry, but there\'s some problem with your connection or the server is down.');
     };
@@ -86,6 +87,12 @@ $(function () {
                 playerCount++;
                 console.log(json.data[i]);
                 playerListElement.append("<div id='player_"+json.data[i].index+"'>"+json.data[i].name+"</div>")
+
+                let img = document.createElement("img");
+                img.src = "./img/avatar"+(json.data[i].index+1)+".png";
+                // img.src = randomAvatar();
+                let src = document.getElementById("player_"+json.data[i].index);
+                src.appendChild(img);
             }
         } else if(json.type === "playerJoined"){
           console.log("playerJoined: ");
@@ -97,7 +104,8 @@ $(function () {
             let playerListElement = $("#players");
             playerListElement.append("<div id='player_"+json.data.index+"'>"+json.data.name+"</div>");
             let img = document.createElement("img");
-            img.src = randomAvatar();
+            img.src = "./img/avatar"+(json.data.index+1)+".png";
+            // img.src = randomAvatar();
             let src = document.getElementById("player_"+json.data.index);
             src.appendChild(img);
         } else if(json.type === "playerLeft"){
@@ -108,6 +116,7 @@ $(function () {
             console.log(json.data);
             $("#player_"+json.data.index).remove();
         } else if(json.type === "index"){
+            myIndex = json.index;
             console.log(json);
             $("#player_"+json.index).css("color","red");
         } else if (json.type === "setWord") {
@@ -116,6 +125,7 @@ $(function () {
         } else if (json.type === "firstPlayer") {
             if(json.isTrue) {
               console.log("i am firstplayer");
+              amIDrawer = true;
 
                     document.getElementById("startGame").addEventListener("click", () => {
                         if(playerCount >= 2) {
@@ -128,6 +138,11 @@ $(function () {
                         }
                     });
             }
+        } else if (json.type === "drawerChanged") {
+          console.log(json.data);
+          if(json.data.newIndex === myIndex) amIDrawer = true;
+          else amIDrawer = false;
+          console.log("am i drawer?: "+amIDrawer);
         } else {
             console.log('Excuse me what the fuck?: ', json);
         }

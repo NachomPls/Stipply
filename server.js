@@ -95,6 +95,7 @@ let drawHistory = []; //Alle aktionen vom zeichnen her.
 let clients = []; // Da sind Daten von allen spielern drin
 let freeIndex = []; // Unbenutze Id's die mindestens schon 1 mal verwendet werden. Die werden also wiederverwendet
 let indexCount = 0; // Zum vergeben von neuen indexen. Das passiert aber nur wenn freeIndex leer is.
+let isDrawerIndex = 0;
 
 //var for game instance
 let Game = require('./gameLoop.js');
@@ -134,6 +135,7 @@ wsServer.on('request', function (request) {
     connection: connection, //in connection sind die sende funktion von jedem client. Like clients[i].connection.sendUTF("lol") => i kriegt jetzt lol.
     userName: userName,
     score: score,
+    isDrawing: false
   };
 
   //hier kriegt er jetzt nen index. Dunno ob er wirklich nötig is, es is aber leichter für mich zu hantieren.. like hier und im js dann.
@@ -152,7 +154,13 @@ wsServer.on('request', function (request) {
   console.log("DEBUG:");
   console.log("clients: "+clients.length);
   console.log("freIndex: "+freeIndex.length);
-  if(clients.length === (freeIndex.length+1)) connection.sendUTF(JSON.stringify({ type: 'firstPlayer', isTrue: 'true'}));
+  if(clients.length === (freeIndex.length+1)) {
+    clients[index].isDrawer = true;
+    isDrawerIndex = index;
+    connection.sendUTF(JSON.stringify({ type: 'firstPlayer', isTrue: 'true'}));
+  } else {
+    clients[index].isDrawer = false;
+  }
 
   generateWord(randomWord)
       .then(word => {
@@ -192,7 +200,8 @@ wsServer.on('request', function (request) {
         let tempPlayer = {
           name: clients[i].userName,
           score: clients[i].score,
-          index: clients[i].index
+          index: clients[i].index,
+          isDrawer: clients[i].isDrawer
         };
         tempArray.push(tempPlayer);
       }
@@ -210,10 +219,12 @@ wsServer.on('request', function (request) {
         clients[index].userName = htmlEntities(message_json.name);
         clients[index].score = 0; //ab dem namen gibts auch nen score
         console.log((new Date()) + ' User is known as: ' + clients[index].userName);
+        console.log("DEBUG IS DRAWER?"+clients[index].isDrawer);
         let client = {
           name: clients[index].userName,
           score: clients[index].score,
-          index: index
+          index: index,
+          isDrawer: clients[index].isDrawer
         };
         let json = JSON.stringify({ type: 'playerJoined', data: client });
         for (let i = 0; i < clients.length; i++) {
@@ -249,7 +260,7 @@ wsServer.on('request', function (request) {
       } else if (message_json.type === 'startGame') {
         console.log("DEBUG START GAME");
         //TODO only show this to first person
-        gameInstance = new Game(clients)
+        gameInstance = new Game(clients);
       }
     }
   });
@@ -264,6 +275,7 @@ wsServer.on('request', function (request) {
         freeIndex.push(index); //die benutze Id freigeben
         clients[index].userName = false; //und die werte entfernen
         clients[index].score = false;
+        clients[index].isDrawer = false;
       }
     }
   })
