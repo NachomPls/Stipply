@@ -23,6 +23,7 @@
     min-width: 69px;
     font-weight: bold;
     text-align: center;
+    overflow-wrap: break-word;
 }
 
 #players > div > img {
