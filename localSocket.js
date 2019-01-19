@@ -123,11 +123,11 @@ $(function () {
                 //TODO STUFF
         } else if (json.type === "firstPlayer") {
             if(json.isTrue) {
-                  console.log("i am firstplayer");
+                  console.log("i am first player");
                   let elem = document.createElement("div");
                   elem.setAttribute("id", "startGame");
                   document.getElementById("inputField").appendChild(elem);
-                document.getElementById("startGame").innerHTML = "Press me to start! Players: " + playerCount;
+                document.getElementById("startGame").innerHTML = "Wait for another Player to join!";
                 amIDrawer = true;
 
                     document.getElementById("startGame").addEventListener("click", () => {
@@ -145,7 +145,10 @@ $(function () {
           console.log(json.data);
           amIDrawer = json.data.newIndex === myIndex;
           console.log("am i drawer?: "+amIDrawer);
+        } else if (json.type === "timer") {
+            $("#counter").text(json.data.toString() + "s remaining")
         } else {
+            //this should never happen += 1;
             console.log('Excuse me what the fuck?: ', json);
         }
     };
