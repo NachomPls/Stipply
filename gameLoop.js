@@ -5,6 +5,7 @@ let serv = require("./server");
 module.exports = class Game {
     constructor(players) {
         this.players = players;
+        this.solved = false;
         this.currentDrawer = 0;
         console.log("the constructor has been called!");
         this.round = 0;
@@ -45,6 +46,7 @@ module.exports = class Game {
 
 
     nextRound() {
+        this.solved = false;
         this.obscureWord(); // will execute asynchronously but thats ok
         console.log("this is round: " + this.round);
         this.round++;
@@ -90,4 +92,19 @@ module.exports = class Game {
         i.connection.sendUTF(json);
       }
     }
+
+    messageFromPlayer(obj) {
+      console.log(obj.index + " " + obj.word);
+      if(obj.word === this.currentWord && !this.solved) {
+        this.solved = true;
+        this.players[obj.index].score += 15;
+        let json = JSON.stringify({type: "chatRights", data: false);
+        this.players[obj.index].connection.sendeUTF(json);
+      }
+      else if(obj.word === this.currentWord && this.solved) {
+        this.players[obj.index].score += 10;
+        let json = JSON.stringify({type: "chatRights", data: false);
+        this.players[obj.index].connection.sendeUTF(json);
+    }
+    console.log(this.players[obj.index].score);
 };

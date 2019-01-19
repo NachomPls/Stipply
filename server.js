@@ -232,7 +232,7 @@ wsServer.on('request', function (request) {
             } else if (message_json.type === "message") { // chat nachricht
                 // log and broadcast the message
                 console.log((new Date()) + ' Received Message from ' + userName + ': ' + message_json.data);
-
+                gameInstance.messageFromPlayer({index: index, word: message_json.data})
                 // we want to keep history of all sent messages
                 let obj = {
                     text: htmlEntities(message_json.data),
