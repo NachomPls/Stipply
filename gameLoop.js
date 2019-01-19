@@ -55,7 +55,10 @@ module.exports = class Game {
                 type: "startRound",
             }));
         })
-        this.timer(10);//TODO CHANGE
+        for(let i = 0; i < this.players.length; i++) {
+          if(i != this.currentDrawer) this.players[i].connection.sendUTF({type: "chatRights", data: true});
+        }
+        this.timer(60);//TODO CHANGE
     }
 
     endRound() {
@@ -98,13 +101,14 @@ module.exports = class Game {
       if(obj.word === this.currentWord && !this.solved) {
         this.solved = true;
         this.players[obj.index].score += 15;
-        let json = JSON.stringify({type: "chatRights", data: false);
-        this.players[obj.index].connection.sendeUTF(json);
+        let json = JSON.stringify({type: "chatRights", data: false});
+        this.players[obj.index].connection.sendUTF(json);
       }
       else if(obj.word === this.currentWord && this.solved) {
         this.players[obj.index].score += 10;
-        let json = JSON.stringify({type: "chatRights", data: false);
-        this.players[obj.index].connection.sendeUTF(json);
+        let json = JSON.stringify({type: "chatRights", data: false});
+        this.players[obj.index].connection.sendUTF(json);
     }
     console.log(this.players[obj.index].score);
-};
+  }
+}

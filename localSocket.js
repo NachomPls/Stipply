@@ -1,6 +1,6 @@
 let connection;
 let playerCount = 0;
-let amIDrawer = false;
+let chatRights = false;
 let canIDraw = false;
 let myIndex = false;
 
@@ -131,8 +131,10 @@ $(function () {
             let json = JSON.stringify({ type:'draw', data: obj });
             addMessage("Server", "Round Ended!");
         } else if (json.type === "startRound") {
-            if(amIDrawer) canIDraw = true;
+            if(chatRights) canIDraw = true;
             addMessage("Server", "Round Started!");
+        } else if (json.type === "chatRights") {
+            chatRights = json.data;
         } else if (json.type === "firstPlayer") {
             if(json.isTrue) {
                   console.log("i am first player");
@@ -140,7 +142,7 @@ $(function () {
                   elem.setAttribute("id", "startGame");
                   document.getElementById("inputField").appendChild(elem);
                 document.getElementById("startGame").innerHTML = "Wait for another Player to join!";
-                amIDrawer = true;
+                chatRights = true;
 
                     document.getElementById("startGame").addEventListener("click", () => {
                         if(playerCount >= 2) {
@@ -155,8 +157,8 @@ $(function () {
             }
         } else if (json.type === "drawerChanged") {
           console.log(json.data);
-          amIDrawer = json.data.newIndex === myIndex;
-          console.log("am i drawer?: "+amIDrawer);
+          chatRights = json.data.newIndex === myIndex;
+          console.log("am i drawer?: "+chatRights);
         } else if (json.type === "timer") {
             $("#counter").text(json.data.toString() + "s remaining")
         } else {
@@ -166,7 +168,7 @@ $(function () {
     };
 
     input.keydown(function(e) {
-        if(!amIDrawer) {
+        if(!chatRights) {
           if (e.keyCode === 13) {
             let msg = $(this).val();
             if (!msg) {
