@@ -73,7 +73,7 @@ function select(toolName) {
       break;
       //clearCanvas isn't a real tool but needs to be selected anyway
     case "clearCanvas":
-        if(amIDrawer) {
+        if(amIDrawer && canIDraw) {
           clear();
           background(255);
           ink = startInk;
@@ -137,7 +137,7 @@ function adjustedStrokeWeight () {
 
 function mouseDragged()
 {
-  if(amIDrawer) {
+  if(amIDrawer && canIDraw) {
     strokeWeight(adjustedStrokeWeight());
     if(!(ink <= 0) && (activeTool === "brush")) {
       stroke(brushColour);
@@ -159,7 +159,7 @@ function mouseDragged()
 }
 
 function mousePressed() {
-  if(activeTool === "bucket" && amIDrawer) {
+  if(activeTool === "bucket" && amIDrawer && canIDraw) {
     //setup
     let mousePos = {
       x: Math.round(mouseX),

@@ -26,7 +26,7 @@ module.exports = class Game {
                      }
                  });
              });
-     } 
+     }
 
     timer(initial) { // done
         this.players.forEach((client) => {
@@ -48,16 +48,25 @@ module.exports = class Game {
         this.obscureWord(); // will execute asynchronously but thats ok
         console.log("this is round: " + this.round);
         this.round++;
+        this.players.forEach((client) => {
+            client.connection.sendUTF(JSON.stringify({
+                type: "startRound",
+            }));
+        })
         this.timer(10);//TODO CHANGE
     }
 
-    endRound() { 
+    endRound() {
+        console.log("End Round fired!");
         // show word, do scoreboard
         this.players.forEach((client) => {
             client.connection.sendUTF(JSON.stringify({
                 type: "setWord",
-                data: this.currentWord                                                                                                                                                                    
-            }))                            
+                data: this.currentWord
+            }));
+            client.connection.sendUTF(JSON.stringify({
+                type: "endRound",
+            }));
         })
         setTimeout(() => {
             if (this.round < 5) {
@@ -66,7 +75,7 @@ module.exports = class Game {
             } else {
                 //declare winner
                 console.log("THE GAME IS OVER PLEASE GET A LIFE NOW");
-            }            
+            }
         }, 1000)
     }
 
@@ -74,7 +83,7 @@ module.exports = class Game {
       const oldIndex = this.currentDrawer
       this.currentDrawer = (oldIndex + 1 )%this.players.length;
       console.log("new drawer index: "+this.currentDrawer);
-      this.players[oldIndex].isDrawer = false;      
+      this.players[oldIndex].isDrawer = false;
       this.players[this.currentDrawer].isDrawer = true;
       let json = JSON.stringify({type: "drawerChanged", data: { oldIndex: oldIndex, newIndex: this.currentDrawer}});
       for(let i of this.players) {

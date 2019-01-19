@@ -1,6 +1,7 @@
 let connection;
 let playerCount = 0;
 let amIDrawer = false;
+let canIDraw = false;
 let myIndex = false;
 
 //returns a random avatar picture to use in the scoreboard
@@ -120,7 +121,18 @@ $(function () {
             $("#player_"+json.index).css("color","red");
         } else if (json.type === "setWord") {
             $("#word-to-draw").text(json.data)
-                //TODO STUFF
+        } else if (json.type === "endRound") {
+            canIDraw = false;
+            clear();
+            background(255);
+            let obj = {
+              type: 'clear'
+            };
+            let json = JSON.stringify({ type:'draw', data: obj });
+            addMessage("Server", "Round Ended!");
+        } else if (json.type === "startRound") {
+            if(amIDrawer) canIDraw = true;
+            addMessage("Server", "Round Started!");
         } else if (json.type === "firstPlayer") {
             if(json.isTrue) {
                   console.log("i am first player");
@@ -154,15 +166,17 @@ $(function () {
     };
 
     input.keydown(function(e) {
-        if (e.keyCode === 13) {
+        if(!amIDrawer) {
+          if (e.keyCode === 13) {
             let msg = $(this).val();
             if (!msg) {
-                return;
+              return;
             }
             let json = JSON.stringify({ type:'message', data: msg });
             // send the message as an ordinary text
             connection.send(json);
             $(this).val('');
+          }
         }
     });
 
