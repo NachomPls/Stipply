@@ -129,11 +129,12 @@ $(function () {
             let obj = {
               type: 'clear'
             };
-            let json = JSON.stringify({ type:'draw', data: obj });
-            addMessage("Server", "Round Ended!");
+            addMessage("Server", "Round "+json.round+" Ended!");
         } else if (json.type === "startRound") {
             if(amIDrawer) canIDraw = true;
-            addMessage("Server", "Round Started!");
+            addMessage("Server", "Round "+json.round+" Started!");
+        } else if (json.type === "solved") {
+            addMessage("Server", "You guessed the word!");
         } else if (json.type === "chatRights") {
             console.log("my chat rights: " + json.data.isSet);
             chatRights = json.data.isSet;

@@ -53,7 +53,8 @@ module.exports = class Game {
         this.round++;
         this.players.forEach((client) => {
             client.connection.sendUTF(JSON.stringify({
-                type: "startRound"
+                type: "startRound",
+                round: this.round
             }));
         });
         for(let i = 0; i < this.players.length; i++) {
@@ -62,7 +63,7 @@ module.exports = class Game {
           if(i === this.currentDrawer)
               this.players[i].connection.sendUTF(JSON.stringify({type: "chatRights", data: {isSet: false}}));
         }
-        this.timer(60);//TODO CHANGE
+        this.timer(5);//TODO CHANGE
     }
 
     endRound() {
@@ -83,6 +84,7 @@ module.exports = class Game {
             }));
             client.connection.sendUTF(JSON.stringify({
                 type: "endRound",
+                round: this.round
             }));
             client.connection.sendUTF(JSON.stringify({
                 type: "scoreUpdate",
@@ -120,11 +122,15 @@ module.exports = class Game {
         this.players[obj.index].score += 15;
         let json = JSON.stringify({type: "chatRights", data: { isSet: false}});
         this.players[obj.index].connection.sendUTF(json);
+        let json2 = JSON.stringify({type: "solved"});
+        this.players[obj.index].connection.sendUTF(json2);
       }
       else if(obj.word === this.currentWord && this.solved) {
         this.players[obj.index].score += 10;
         let json = JSON.stringify({type: "chatRights", data: { isSet: false}});
         this.players[obj.index].connection.sendUTF(json);
+        let json2 = JSON.stringify({type: "solved"});
+        this.players[obj.index].connection.sendUTF(json2);
     }
     console.log(this.players[obj.index].score);
   }
