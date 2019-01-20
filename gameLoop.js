@@ -57,7 +57,8 @@ module.exports = class Game {
             }));
         })
         for(let i = 0; i < this.players.length; i++) {
-          if(i != this.currentDrawer) this.players[i].connection.sendUTF({type: "chatRights", data: true});
+          if(i !== this.currentDrawer) this.players[i].connection.sendUTF(JSON.stringify({type: "chatRights", data: {isSet: true}}));
+          if(i === this.currentDrawer) this.players[i].connection.sendUTF(JSON.stringify({type: "chatRights", data: {isSet: false}}));
         }
         this.timer(60);//TODO CHANGE
     }
@@ -102,12 +103,12 @@ module.exports = class Game {
       if(obj.word === this.currentWord && !this.solved) {
         this.solved = true;
         this.players[obj.index].score += 15;
-        let json = JSON.stringify({type: "chatRights", data: false});
+        let json = JSON.stringify({type: "chatRights", data: { isSet: false}});
         this.players[obj.index].connection.sendUTF(json);
       }
       else if(obj.word === this.currentWord && this.solved) {
         this.players[obj.index].score += 10;
-        let json = JSON.stringify({type: "chatRights", data: false});
+        let json = JSON.stringify({type: "chatRights", data: { isSet: false}});
         this.players[obj.index].connection.sendUTF(json);
     }
     console.log(this.players[obj.index].score);

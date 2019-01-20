@@ -40,7 +40,7 @@ $(function () {
         try {
             json = JSON.parse(message.data);
         } catch (e) {
-            console.log('Invalid JSON: ', message.data);
+            console.log('Invalid JSON: ', message);
             return;
         }
 
@@ -53,8 +53,8 @@ $(function () {
             // let the user write another message
             addMessage(json.data.author, json.data.text);
         } else if(json.type === "draw") {
-            console.log("received draw");
-            console.log(json.data);
+            //console.log("received draw");
+            //console.log(json.data);
             if (json.data.type === "brush") {
                 strokeWeight(json.data.strokeWeight);
                 stroke(json.data.color);
@@ -135,7 +135,8 @@ $(function () {
             if(amIDrawer) canIDraw = true;
             addMessage("Server", "Round Started!");
         } else if (json.type === "chatRights") {
-            chatRights = json.data;
+            console.log("my chat rights: " + json.data.isSet);
+            chatRights = json.data.isSet;
         } else if (json.type === "firstPlayer") {
             if(json.isTrue) {
                   console.log("i am first player");
