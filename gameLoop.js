@@ -67,6 +67,14 @@ module.exports = class Game {
 
     endRound() {
         console.log("End Round fired!");
+
+        let indexArray = [];
+        let scoreArray = [];
+        this.players.forEach((client) => {
+          indexArray.push(client.index);
+          scoreArray.push(client.score);
+        });
+
         // show word, do scoreboard
         this.players.forEach((client) => {
             client.connection.sendUTF(JSON.stringify({
@@ -75,6 +83,11 @@ module.exports = class Game {
             }));
             client.connection.sendUTF(JSON.stringify({
                 type: "endRound",
+            }));
+            client.connection.sendUTF(JSON.stringify({
+                type: "scoreUpdate",
+                index: indexArray,
+                score: scoreArray
             }));
         });
         setTimeout(() => {

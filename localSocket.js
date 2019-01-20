@@ -137,6 +137,8 @@ $(function () {
         } else if (json.type === "chatRights") {
             console.log("my chat rights: " + json.data.isSet);
             chatRights = json.data.isSet;
+        } else if (json.type === "scoreUpdate") {
+            console.log(json.index, json.score);
         } else if (json.type === "firstPlayer") {
             if(json.isTrue) {
                   console.log("i am first player");
