@@ -108,7 +108,7 @@ module.exports = class Game {
     }
 
     messageFromPlayer(obj) {
-      if(obj.word === this.currentWord && !this.solved) {
+      if(obj.word.toLowerCase() === this.currentWord.toLowerCase() && !this.solved) {
         this.solved = true;
         this.players[obj.index].score += 15;
         let json = JSON.stringify({type: "chatRights", data: { isSet: false}});
@@ -116,7 +116,9 @@ module.exports = class Game {
         let json2 = JSON.stringify({type: "solved"});
         this.players[obj.index].connection.sendUTF(json2);
       }
-      else if(obj.word === this.currentWord && this.solved) {
+      else if(obj.word.toLowerCase() === this.currentWord.toLowerCase() && this.solved) {
+          console.log(obj.word.toLowerCase());
+          console.log(this.currentWord.toLowerCase());
         this.players[obj.index].score += 10;
         let json = JSON.stringify({type: "chatRights", data: { isSet: false}});
         this.players[obj.index].connection.sendUTF(json);

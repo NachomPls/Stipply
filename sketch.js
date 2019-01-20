@@ -102,15 +102,6 @@ function setup() {
 }
 
 
-function draw()
-{
-    document.getElementsByClassName('debug')[0].innerHTML = Math.round(mouseX);
-    document.getElementsByClassName('debug')[1].innerHTML = Math.round(mouseY);
-    document.getElementsByClassName('debug')[2].innerHTML = Math.round(pmouseX);
-    document.getElementsByClassName('debug')[3].innerHTML = Math.round(pmouseY);
-    document.getElementsByClassName('debug')[4].innerHTML = ink;
-}
-
 //Range Slider for Brush
 function toggleSlide(id, labelId) {
     let slideElem = document.getElementById(id);
