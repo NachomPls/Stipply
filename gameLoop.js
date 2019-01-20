@@ -36,6 +36,7 @@ module.exports = class Game {
                 data: initial // remaining seconds
             }))
         });
+        console.log(initial); //<-- do not remove this!!!
         if (initial === 0) {
             console.log("Round over")
             this.endRound();
@@ -52,7 +53,7 @@ module.exports = class Game {
         this.round++;
         this.players.forEach((client) => {
             client.connection.sendUTF(JSON.stringify({
-                type: "startRound",
+                type: "startRound"
             }));
         })
         for(let i = 0; i < this.players.length; i++) {
