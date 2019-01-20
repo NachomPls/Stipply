@@ -4,14 +4,6 @@ body {
     background: radial-gradient(circle, rgba(34,194,195,0.6197829473586309) 0%, rgba(253,187,45,0.6561975131849616) 100%);
 }
 
-.debug {
-    margin-top: 3px;
-    display: inline-block;
-    background-color: lightgrey;
-    padding: 2px;
-    border: 2px solid black;
-}
-
 .tool {
     margin-top: 5px;
     background-color: lightgrey;
@@ -25,7 +17,7 @@ body {
     background: yellow;
 }
 
-.tool>img {
+.tool > img {
     width: 32px;
     height: 32px;
 }
@@ -79,6 +71,14 @@ body {
     margin-left: 20%;
     position: relative;
     left: 10%;
+}
+
+#counter {
+    margin-top: 3px;
+    display: inline-block;
+    background-color: lightgrey;
+    padding: 2px;
+    border: 2px solid black;
 }
 
 #slider {

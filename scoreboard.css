@@ -8,30 +8,29 @@
     border:1px solid #CCC;
     margin-top: 15px;
     margin-left:8px;
-    width: 12%;
+    width: 11%;
     -ms-word-wrap: break-word;
     word-wrap: break-word;
     opacity: 0.9;
 }
 
+#players {
+    flex-direction: column;
+}
+
 #players > div {
-    /*TODO make container same height as cute cats :> and not make them overflow holy*/
     background: rgba(126, 126, 139, 0.41);
     border: 2px solid rgba(122, 121, 139, 0.6);
     opacity: 0.7;
-    min-height: 75px;
-    min-width: 69px;
     font-weight: bold;
-    text-align: center;
+    text-align: start;
     overflow-wrap: break-word;
 }
 
 #players > div > img {
-    /*max-height: 75px;*/
-    /*max-width: 69px;*/
-    max-height: 37%;
-    max-width: 37%;
-    float: left;
+    max-height: 55%;
+    max-width: 55%;
+    float: inside;
 }
 
 @media (max-width: 70em) {

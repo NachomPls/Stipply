@@ -64,13 +64,9 @@ function initRandomInt() {
 }
 module.exports.randomCategory = "Category " + initRandomInt();
 
-// wordData.collection('Words').doc("Category " + initRandomInt()).get().then(function(doc) {
-//    console.log(doc.data());
-// });
 
 //fetches random word from random document
 module.exports.generateWord = function generateWord(category) {
-    console.log(category);
     return admin.firestore().collection('Words').doc(category).get()
         .then((categorySnap) => {
             const max = Object.keys(categorySnap.data()).length;
@@ -87,13 +83,13 @@ let webSocketsServerPort = 1337;
 let webSocketServer = require('websocket').server;
 let http = require('http');
 
-// Global letiables
-let history = []; //Alle aktionen vom chat her
-let drawHistory = []; //Alle aktionen vom zeichnen her.
-let clients = []; // Da sind Daten von allen spielern drin
-let freeIndex = []; // Unbenutze Id's die mindestens schon 1 mal verwendet werden. Die werden also wiederverwendet
-let indexCount = 0; // Zum vergeben von neuen indexen. Das passiert aber nur wenn freeIndex leer is.
-let isDrawerIndex = 0;
+// Global letiables... heh
+let history = []; //All chat actions
+let drawHistory = []; //All canvas actions
+let clients = []; // all player data
+let freeIndex = []; // id's that dont get used but have been used already. Keeping it green with recycling
+let indexCount = 0; // this only gets used if freeIndex is empty
+let isDrawerIndex = 0; //has current Drawer in it
 
 //var for game instance
 let Game = require('./gameLoop.js');
@@ -114,44 +110,37 @@ server.listen(webSocketsServerPort, function () {
 
 // WebSocket server
 let wsServer = new webSocketServer({
-    // WebSocket server is tied to a HTTP server. WebSocket
-    // request is just an enhanced HTTP request. For more info
-    // http://tools.ietf.org/html/rfc6455#page-6
     httpServer: server
 });
 
 // This callback function is called every time someone
 // tries to connect to the WebSocket server
 wsServer.on('request', function (request) {
-    console.log((new Date()) + ' Connection from origin ' + request.origin + '.');
     let connection = request.accept(null, request.origin);
 
     // we need to know client index to remove them on 'close' event
     let userName = false;
     let score = false;
     let obj = {
-        connection: connection, //in connection sind die sende funktion von jedem client. Like clients[i].connection.sendUTF("lol") => i kriegt jetzt lol.
+        connection: connection, //send functions of every client
         userName: userName,
         score: score,
         isDrawing: false
     };
 
-    //hier kriegt er jetzt nen index. Dunno ob er wirklich nötig is, es is aber leichter für mich zu hantieren.. like hier und im js dann.
+    //giving player an index for easier handling
     let index;
-    if (!(freeIndex > 0)) { //gibts keine freie Id aka es gibt clients von 0...n dann bekommt der nächste n+1.
-        clients.push(obj); //neuen client dranhängen.
+    if (!(freeIndex > 0)) { //if n clients already exist this one gets n+1
+        clients.push(obj); //pushing new client to actual clients
         index = indexCount;
         indexCount++;
-    } else { //sind freie Id's da wird eine raus gepoped (benutzt und entfernt von freeIndex).
+    } else { //case of free ID's; get one from freeIndex
         index = freeIndex.pop();
-        clients[index] = obj; //Der platz wird eingenohmen anstelle dazu gepushed zu werden.
+        clients[index] = obj; //new client takes place in clients at pos index
     }
     clients[index].index = index;
-    // TODO
 
-    console.log("DEBUG:");
-    console.log("clients: "+clients.length);
-    console.log("freIndex: "+freeIndex.length);
+    //if only one person is in clients
     if(clients.length === (freeIndex.length+1)) {
         clients[index].isDrawer = true;
         isDrawerIndex = index;
@@ -159,30 +148,8 @@ wsServer.on('request', function (request) {
     } else {
         clients[index].isDrawer = false;
     }
-    //TODO FIX
-
-    // generateWord()
-    //     .then(word => {
-    //         const placeholder = word.split("").map(() => "_").join(" ");
-    //
-    //         clients.forEach((client, index) => {
-    //             if (index < 1) {
-    //                 client.connection.sendUTF(JSON.stringify({ type: 'setWord', data: word }))
-    //             } else {
-    //                 client.connection.sendUTF(JSON.stringify({ type: 'setWord', data: placeholder }))
-    //             }
-    //         });
-    //     });
-
-    //Log log log lol
-    console.log((new Date()) + ' Connection accepted.');
-    console.log("Debug:");
-    console.log("IndexCount: " + indexCount);
-    console.log("FreeIndex: " + freeIndex);
-    console.log("Index: " + index);
 
     // send back chat history
-    //Wenn jemand neu connected kriegt er die chat history, draw history und die anderen clients von der lobby, falls da was drin steht.
     if (history.length > 0) {
         connection.sendUTF(JSON.stringify({ type: 'history', data: history }));
     }
@@ -190,9 +157,9 @@ wsServer.on('request', function (request) {
         connection.sendUTF(JSON.stringify({ type: 'drawHistory', data: drawHistory }));
     }
     if (clients.length > 0) {
-        console.log("Sending clients");
+
         let tempArray = [];
-        for (let i = 0; i < clients.length; i++) { //etwas umständlich hier, aber nötig weil ich nicht client.connection verteilen möchte
+        for (let i = 0; i < clients.length; i++) {
             if (clients[i].userName) {
                 let tempPlayer = {
                     name: clients[i].userName,
@@ -207,16 +174,14 @@ wsServer.on('request', function (request) {
     }
 
     // user sent some message
-    //der server kriegt ne nachricht, dann fired das hier
     connection.on('message', function (message) {
-        console.log(message);
+
         if (message.type === 'utf8') { // accept only text, like no .mp3, no .pdf, no .rofl just texxxxt
-            let message_json = JSON.parse(message.utf8Data); //wir senden eigentlich nur in json format
-            if (message_json.type === "name") { //name wurde zwar schon bei clients gepushed, is aber noch empty. Sollte sich der dau dan ändlich entscheiden den alert zu beachten fired das hier.
+            let message_json = JSON.parse(message.utf8Data);
+            if (message_json.type === "name") { //fires after person uses alert
                 clients[index].userName = htmlEntities(message_json.name);
-                clients[index].score = 0; //ab dem namen gibts auch nen score
-                console.log((new Date()) + ' User is known as: ' + clients[index].userName);
-                console.log("DEBUG IS DRAWER?"+clients[index].isDrawer);
+                clients[index].score = 0; //score for player :>
+
                 let client = {
                     name: clients[index].userName,
                     score: clients[index].score,
@@ -227,50 +192,47 @@ wsServer.on('request', function (request) {
                 for (let i = 0; i < clients.length; i++) {
                     clients[i].connection.sendUTF(json);
                 }
-                console.log("This is the index Nr: " + index);
                 clients[index].connection.sendUTF(JSON.stringify({ type: 'index', index: index }));
             } else if (message_json.type === "message") { // chat nachricht
                 // log and broadcast the message
-                console.log((new Date()) + ' Received Message from ' + userName + ': ' + message_json.data);
                 gameInstance.messageFromPlayer({index: index, word: message_json.data});
                 // we want to keep history of all sent messages
                 let obj = {
                     text: htmlEntities(message_json.data),
                     author: clients[index].userName
                 };
-                history.push(obj); //dranhängen
-                history = history.slice(-100); //<- no ideam, was copied
+                history.push(obj);
+                history = history.slice(-100); //<- no idea, was copied from a chat guide cuz it didnt work before
                 // broadcast message to all connected clients
-                let json = JSON.stringify({ type: 'message', data: obj }); //an alle anderen verteilen
+                let json = JSON.stringify({ type: 'message', data: obj });
                 for (let i = 0; i < clients.length; i++) {
                     clients[i].connection.sendUTF(json);
                 }
-            } else if (message_json.type === "draw") { //es wurde gezeichnet
-                console.log(message_json.data);
-                drawHistory.push(message_json.data); //wird einfach wies is drangehängt
-                if (message_json.data.type === "clear") { //bzw mus er schaun obs ein clear war, wenn ja mus die history gecleared werden
+            } else if (message_json.type === "draw") { //something has been drawn
+
+                drawHistory.push(message_json.data);
+                if (message_json.data.type === "clear") { //if the message was clear
                     drawHistory = [];
                 }
-                for (let i = 0; i < clients.length; i++) { //Unnnnned wieder verteilen, like maybe i should write a function that does this for how often we use it :thiking:
-                    if (i !== index) clients[i].connection.sendUTF(message.utf8Data); // wird an alle auser sich geschickt, weil das zeichnen local passiert (aus performance gründen), vergleichweise geht der chat zum server und zum sendenden client zurück
+                for (let i = 0; i < clients.length; i++) {
+                    //send to everyone but themselves
+                    if (i !== index) clients[i].connection.sendUTF(message.utf8Data);
                 }
             } else if (message_json.type === 'startGame') {
-                console.log("DEBUG START GAME");
-                //TODO only show this to first person
                 gameInstance = new Game(clients);
             }
         }
     });
 
     // user disconnected
-    connection.on('close', function (connection) { //Wenn sich ein spieler schleicht
-        if (clients[index].userName !== false) { //nur wenn der schon den alert beantwortet hat. (mir fällt auch das hier noch eine condition hin muss falls er noch keinen hat :thinking:)
-            console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected.");
+    connection.on('close', function () { //case for a player leaving
+        if (clients[index].userName !== false) { //only if player is valid already
+
             for (let i = 0; i < clients.length; i++) {
                 let json = JSON.stringify({ type: 'playerLeft', data: { name: clients[index].userName, score: clients[index].score, index: index } });
                 clients[i].connection.sendUTF(json);
-                freeIndex.push(index); //die benutze Id freigeben
-                clients[index].userName = false; //und die werte entfernen
+                freeIndex.push(index); //get used ID for later use
+                clients[index].userName = false; //delete all the things
                 clients[index].score = false;
                 clients[index].isDrawer = false;
             }

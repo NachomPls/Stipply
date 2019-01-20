@@ -1,3 +1,4 @@
+//setup for client side database functions
 let config = {
     apiKey: "AIzaSyCEyGDfMrVb7akI5XCgVQcYUG-sAtZlRTc",
     authDomain: "stipply-c1375.firebaseapp.com",

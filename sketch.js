@@ -43,7 +43,6 @@ const Colours ={red: '#FF0000', lightGreen: '#00FF00', darkGreen: '#01A400',
 
 //creates a button for each colour
 function createButton (colour) {
-    // console.log(colour);
     // create container
     const div = document.createElement("div");
     // css classes!!!
@@ -54,7 +53,6 @@ function createButton (colour) {
     div.addEventListener("click", () => {
         brushColour = Colours[colour];
         highlightTool();
-        console.log(colour);
     });
 
     return div;
@@ -64,11 +62,9 @@ function createButton (colour) {
 function select(toolName) {
   switch (toolName) {
     case "bucket":
-        console.log(toolName);
         activeTool = toolName;
       break;
     case "brush":
-        console.log(toolName);
         activeTool = toolName;
       break;
       //clearCanvas isn't a real tool but needs to be selected anyway
@@ -77,7 +73,6 @@ function select(toolName) {
           clear();
           background(255);
           ink = startInk;
-          console.log("clear");
           let obj = {
             type: 'clear'
           };
@@ -189,61 +184,49 @@ function floodFill(startX, startY) {
   let startB = canvasPixels.data[((startY*drawCanvas.width + startX) * 4)+2];
   let pixelColor = hexToRGB(brushColour);
   let pixelStack = [[startX, startY]];
-  // console.log(canvasPixels);
 
   let debugCount = 0;
-  while(pixelStack.length)
-  {
+  while(pixelStack.length) {
     debugCount++;
     if (debugCount >= 10000) {
       break;
     }
-    console.log("Debug");
     let newPos, x, y, pixelPos, reachLeft, reachRight;
     newPos = pixelStack.pop();
     x = newPos[0];
     y = newPos[1];
 
     pixelPos = (y*drawCanvas.width + x) * 4;
-    while(y-- >= 0 && matchStartColor(pixelPos))
-    {
+    while(y-- >= 0 && matchStartColor(pixelPos)) {
       pixelPos -= drawCanvas.width * 4;
     }
     pixelPos += drawCanvas.width * 4;
     ++y;
     reachLeft = false;
     reachRight = false;
-    while(y++ <= drawCanvas.height-2 && matchStartColor(pixelPos))
-    {
+    while(y++ <= drawCanvas.height-2 && matchStartColor(pixelPos)) {
       colorPixel(pixelPos);
 
-      if(x >= 1)
-      {
-        if(matchStartColor(pixelPos - 4))
-        {
+      if(x >= 1) {
+        if(matchStartColor(pixelPos - 4)) {
           if(!reachLeft){
             pixelStack.push([x - 1, y]);
             reachLeft = true;
           }
         }
-        else if(reachLeft)
-        {
+        else if(reachLeft) {
           reachLeft = false;
         }
       }
 
-      if(x <= drawCanvas.width-2)
-      {
-        if(matchStartColor(pixelPos + 4))
-        {
-          if(!reachRight)
-          {
+      if(x <= drawCanvas.width-2) {
+        if(matchStartColor(pixelPos + 4)) {
+          if(!reachRight) {
             pixelStack.push([x + 1, y]);
             reachRight = true;
           }
         }
-        else if(reachRight)
-        {
+        else if(reachRight) {
           reachRight = false;
         }
       }
@@ -253,8 +236,7 @@ function floodFill(startX, startY) {
   }
   context.putImageData(canvasPixels, 0, 0);
 
-  function matchStartColor(pixelPos)
-  {
+  function matchStartColor(pixelPos) {
     let r = canvasPixels.data[pixelPos];
     let g = canvasPixels.data[pixelPos+1];
     let b = canvasPixels.data[pixelPos+2];
@@ -262,8 +244,7 @@ function floodFill(startX, startY) {
     return (r === startR && g === startG && b === startB);
   }
 
-  function colorPixel(pixelPos)
-  {
+  function colorPixel(pixelPos) {
     canvasPixels.data[pixelPos+0] = pixelColor[0];
     canvasPixels.data[pixelPos+1] = pixelColor[1];
     canvasPixels.data[pixelPos+2] = pixelColor[2];
