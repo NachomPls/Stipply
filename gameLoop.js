@@ -9,14 +9,14 @@ module.exports = class Game {
         this.currentDrawer = 0;
         console.log("the constructor has been called!");
         this.round = 0;
-        this.currentWord = ""
+        this.currentWord = "";
         this.nextRound();
     }
 
-     obscureWord() { // so nibbo sollt schon gehn k ima try now i setz ds oba auf 5 seconds fia dteos tit do it lol
+     obscureWord() {
          serv.generateWord(serv.randomCategory)
              .then(word => {
-                 this.currentWord = word
+                 this.currentWord = word;
                  const placeholder = word.split("").map(() => "_").join(" ");
 
                  this.players.forEach((client, index) => {
@@ -38,7 +38,7 @@ module.exports = class Game {
         });
         console.log(initial); //<-- do not remove this!!!
         if (initial === 0) {
-            console.log("Round over")
+            console.log("Round over");
             this.endRound();
         } else {
             setTimeout(() => { this.timer(initial - 1) }, 1000);
@@ -55,10 +55,12 @@ module.exports = class Game {
             client.connection.sendUTF(JSON.stringify({
                 type: "startRound"
             }));
-        })
+        });
         for(let i = 0; i < this.players.length; i++) {
-          if(i !== this.currentDrawer) this.players[i].connection.sendUTF(JSON.stringify({type: "chatRights", data: {isSet: true}}));
-          if(i === this.currentDrawer) this.players[i].connection.sendUTF(JSON.stringify({type: "chatRights", data: {isSet: false}}));
+          if(i !== this.currentDrawer)
+              this.players[i].connection.sendUTF(JSON.stringify({type: "chatRights", data: {isSet: true}}));
+          if(i === this.currentDrawer)
+              this.players[i].connection.sendUTF(JSON.stringify({type: "chatRights", data: {isSet: false}}));
         }
         this.timer(60);//TODO CHANGE
     }
@@ -74,7 +76,7 @@ module.exports = class Game {
             client.connection.sendUTF(JSON.stringify({
                 type: "endRound",
             }));
-        })
+        });
         setTimeout(() => {
             if (this.round < 5) {
                 this.changeDrawer();
@@ -87,7 +89,7 @@ module.exports = class Game {
     }
 
     changeDrawer() {
-      const oldIndex = this.currentDrawer
+      const oldIndex = this.currentDrawer;
       this.currentDrawer = (oldIndex + 1 )%this.players.length;
       console.log("new drawer index: "+this.currentDrawer);
       this.players[oldIndex].isDrawer = false;
@@ -113,4 +115,4 @@ module.exports = class Game {
     }
     console.log(this.players[obj.index].score);
   }
-}
+};
