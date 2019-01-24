@@ -13,10 +13,6 @@ body {
     cursor: pointer;
 }
 
-.tool:active {
-    background: yellow;
-}
-
 .tool > img {
     width: 32px;
     height: 32px;

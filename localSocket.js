@@ -5,7 +5,7 @@ let amIDrawer = false;
 let canIDraw = false;
 let myIndex = false;
 
-//returns a random avatar picture to use in the scoreboard
+//returns an avatar picture to use in the scoreboard
 let images = ['avatar1.png', 'avatar2.png', 'avatar3.png',
     'avatar4.png', 'avatar5.png', 'avatar6.png'];
 
@@ -98,7 +98,7 @@ $(function () {
                 document.getElementById("score" + json.data[i].index).append("Score: 0");
 
             }
-        } else if(json.type === "playerJoined"){ //shoots whenever a player joins
+        } else if(json.type === "playerJoined"){ //fires whenever a player joins
             //updating current player Count on button for HTML
             playerCount++;
             if(myIndex === 0) document.getElementById("startGame").innerHTML = "Press me to start! Players: " + playerCount;
@@ -163,8 +163,6 @@ $(function () {
                     document.getElementById("startGame").addEventListener("click", () => {
                         if(playerCount >= 2) {
                             connection.send(JSON.stringify({type: 'startGame', isTrue: 'true'}));
-                            //TODO make it disappear for all clients
-                            //TODO probably needs to be on server but that doesnt work yet
                             let elem = document.getElementById("startGame");
                             elem.parentNode.removeChild(elem);
                         }

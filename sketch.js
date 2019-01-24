@@ -195,7 +195,7 @@ function floodFill(startX, startY) {
     ++y;
     reachLeft = false;
     reachRight = false;
-    while(y++ <= drawCanvas.height-2 && matchStartColor(pixelPos)) {
+    while(y++ <= drawCanvas.height - 2 && matchStartColor(pixelPos)) {
       colorPixel(pixelPos);
 
       if(x >= 1) {
@@ -254,7 +254,7 @@ function hexToRGB(hex) {
     return rgb;
 }
 
-
+//gets player name
 function getName() {
     let person = prompt("Please enter your name:");
     if (person == null || person === "") {
